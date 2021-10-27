@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import Button from "../components/Button";
+import Link from "../components/Link";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
@@ -13,8 +13,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Button>Aloita</Button>
-      <Button>Asetukset</Button>
+      <Link href="/timer">Aloita</Link>
+      <Link href="/settings" bgColor="#3DB2FF">
+        Asetukset
+      </Link>
     </div>
   );
 };
