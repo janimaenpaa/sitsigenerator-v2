@@ -3,6 +3,8 @@ import { Timer as ITimer } from "../types";
 import { addMinutes, addSeconds } from "date-fns";
 import Countdown from "react-countdown";
 import React from "react";
+import Generator from "../components/Generator";
+import useCounter from "../hooks/useCounter";
 
 interface Props {}
 
@@ -18,10 +20,10 @@ const calculateTimeLeft = ({ minutes, seconds }: ITimer) => {
   return addSeconds(addMinutes(timeNow, minutes), seconds);
 };
 
-const renderer = ({ minutes, seconds, completed, api }: any) => {
+const renderer = ({ minutes, seconds, completed, api, props }: any) => {
   if (completed) {
     // Render a completed state
-    return <div>Completed</div>;
+    return <Generator restart={() => api.start()} />;
   } else {
     // Render a countdown
     return (
@@ -44,6 +46,7 @@ const renderer = ({ minutes, seconds, completed, api }: any) => {
 };
 
 const Timer = (props: Props) => {
+  const { count, setCount, increment, reset } = useCounter(0);
   const { timer } = settings;
 
   if (!timer) return <div>No timer found</div>;
@@ -60,7 +63,12 @@ const Timer = (props: Props) => {
         flexDirection: "column",
       }}
     >
-      <Countdown date={countDownTo} renderer={renderer} autoStart={false} />
+      <Countdown
+        key={count}
+        date={countDownTo}
+        renderer={renderer}
+        autoStart={false}
+      />
     </div>
   );
 };
