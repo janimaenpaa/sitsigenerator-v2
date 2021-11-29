@@ -14,3 +14,10 @@ model Punishment {
   id          Int    @id @default(autoincrement())
   description String
 }
+
+model Settings {
+  id      Int @id @default(autoincrement())
+  tables  Int
+  minutes Int
+  seconds Int
+}
