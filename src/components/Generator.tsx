@@ -15,7 +15,7 @@ const Generator = ({ usedPunishments, unUsedPunishments, restart }: Props) => {
   const [isGeneratingPunishment, setIsGeneratingPunishment] = useState(false);
   const [tableHasGenerated, setTableHasGenerated] = useState(false);
   const [PunishmentHasGenerated, setPunishmentHasGenerated] = useState(false);
-  const { tables, punishments } = settings;
+  const { tables } = settings;
 
   if (!tableHasGenerated)
     return (

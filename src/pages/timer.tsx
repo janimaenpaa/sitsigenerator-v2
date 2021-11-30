@@ -1,13 +1,15 @@
 import settings from "../settings";
-import { Punishment, Timer as ITimer } from "../types";
+import { Punishment, Settings, Timer as ITimer } from "../types";
 import { addMinutes, addSeconds } from "date-fns";
 import React, { useEffect, useRef, useState } from "react";
 import { GetStaticProps } from "next";
 import prisma from "../lib/prisma";
 import { Button, Center, Container, Title } from "@mantine/core";
 import Generator from "../components/Generator";
+import Link from "next/link";
 interface Props {
   punishments: Punishment[];
+  settings: Settings;
 }
 
 const setTimerText = (minutes: number, seconds: number) => {
@@ -42,19 +44,20 @@ const useInterval = (callback: any, delay: number | null) => {
   }, [delay]);
 };
 
-const Timer = ({ punishments }: Props) => {
+const Timer = ({ punishments, settings }: Props) => {
   //const { minutes, seconds } = settings;
   //const countDownTo = calculateTimeLeft(timer);
   const [unUsedPunishments, setUnUsedPunishments] = useState(punishments);
   const [usedPunishments, setUsedPunishments] = useState([]);
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(2);
+  const [minutes, setMinutes] = useState(settings.minutes);
+  const [seconds, setSeconds] = useState(settings.seconds);
   const [isRunning, setIsRunning] = useState(false);
   const [timeIsUp, setTimeIsUp] = useState(false);
 
   console.log({ unUsedPunishments });
   console.log({ usedPunishments });
   console.log({ timeIsUp });
+  console.log({ settings });
 
   useInterval(
     () => {
@@ -73,55 +76,61 @@ const Timer = ({ punishments }: Props) => {
   );
 
   const handleRestart = () => {
-    setMinutes(0);
-    setSeconds(2);
+    setMinutes(settings.minutes);
+    setSeconds(settings.seconds);
     setTimeIsUp(false);
   };
 
   return (
-    <Container
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      {timeIsUp ? (
-        <Generator
-          usedPunishments={usedPunishments}
-          unUsedPunishments={unUsedPunishments}
-          restart={handleRestart}
-        />
-      ) : (
-        <Container
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Title style={{ fontSize: "10rem" }}>
-            {setTimerText(minutes, seconds)}
-          </Title>
-          {!isRunning && (
-            <Button onClick={() => setIsRunning(true)}>Käynnistä</Button>
-          )}
-          {isRunning && (
-            <Button color="red" onClick={() => setIsRunning(false)}>
-              Pysäytä
-            </Button>
-          )}
-        </Container>
-      )}
+    <Container style={{ marginTop: 10 }}>
+      <Link href="/" passHref>
+        <Button>Takaisin</Button>
+      </Link>
+
+      <Container
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        {timeIsUp ? (
+          <Generator
+            usedPunishments={usedPunishments}
+            unUsedPunishments={unUsedPunishments}
+            restart={handleRestart}
+          />
+        ) : (
+          <Container
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Title style={{ fontSize: "10rem" }}>
+              {setTimerText(minutes, seconds)}
+            </Title>
+            {!isRunning && (
+              <Button onClick={() => setIsRunning(true)}>Käynnistä</Button>
+            )}
+            {isRunning && (
+              <Button color="red" onClick={() => setIsRunning(false)}>
+                Pysäytä
+              </Button>
+            )}
+          </Container>
+        )}
+      </Container>
     </Container>
   );
 };
 
 export const getStaticProps: GetStaticProps = async () => {
   const punishments = await prisma.punishment.findMany();
-  const settings = await prisma.settings.findMany();
+  const settings = await prisma.settings.findFirst();
   return { props: { punishments, settings } };
 };
 
