@@ -1,10 +1,8 @@
-import settings from "../settings";
 import { Punishment, Settings, Timer as ITimer } from "../types";
-import { addMinutes, addSeconds } from "date-fns";
 import React, { useEffect, useRef, useState } from "react";
 import { GetStaticProps } from "next";
 import prisma from "../lib/prisma";
-import { Button, Center, Container, Title } from "@mantine/core";
+import { Button, Container, Title } from "@mantine/core";
 import Generator from "../components/Generator";
 import Link from "next/link";
 interface Props {
