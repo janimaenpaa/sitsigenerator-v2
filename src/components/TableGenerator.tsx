@@ -1,3 +1,4 @@
+import { Button, Title } from "@mantine/core";
 import { Dispatch, SetStateAction, useState } from "react";
 import useTimeout from "../hooks/useTimeout";
 import settings from "../settings";
@@ -35,9 +36,10 @@ const TableGenerator = ({ tables, setHasGenerated, restart }: Props) => {
       }}
     >
       <div>Rangaistuksen saa pöytä</div>
-      <h2>{generateTableNumber(tables)}</h2>
-     {/*  <button onClick={restart}>Restart</button> */}
-      <button onClick={() => setHasGenerated(true)}>Arvo rangaistus</button>
+      <Title style={{ margin: 10, fontSize: "10rem" }}>
+        {generateTableNumber(tables)}
+      </Title>
+      <Button onClick={() => setHasGenerated(true)}>Arvo rangaistus</Button>
     </div>
   );
 };

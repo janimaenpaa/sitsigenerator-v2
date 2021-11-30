@@ -1,4 +1,4 @@
-import { Button, Container, Title } from "@mantine/core";
+import { Button, Container, Text, Title } from "@mantine/core";
 import { useState } from "react";
 import useTimeout from "../hooks/useTimeout";
 import { Punishment } from "../types";
@@ -41,8 +41,12 @@ const PunishmentGenerator = ({
       }}
     >
       <Title>Rangaistus</Title>
-      <p>{generatePunishment(unUsedPunishments)}</p>
-      <Button onClick={restart}>Käynnistä uudelleen</Button>
+      <Text style={{ margin: 10 }}>
+        {generatePunishment(unUsedPunishments)}
+      </Text>
+      <Button style={{ marginTop: 20 }} onClick={restart}>
+        Käynnistä uudelleen
+      </Button>
     </Container>
   );
 };

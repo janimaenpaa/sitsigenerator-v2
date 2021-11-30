@@ -94,9 +94,19 @@ const Timer = ({ punishments }: Props) => {
           restart={handleRestart}
         />
       ) : (
-        <Container style={{ flexDirection: "column" }}>
-          <Title>{setTimerText(minutes, seconds)}</Title>
-          <Button onClick={() => setIsRunning(true)}>Käynnistä</Button>
+        <Container
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Title style={{ fontSize: "10rem" }}>
+            {setTimerText(minutes, seconds)}
+          </Title>
+          {!isRunning && <Button onClick={() => setIsRunning(true)}>Käynnistä</Button>}
+          {isRunning && <Button color="red" onClick={() => setIsRunning(false)}>Pysäytä</Button>}
         </Container>
       )}
     </Container>
