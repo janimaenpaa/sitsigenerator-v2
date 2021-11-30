@@ -6,6 +6,8 @@ import { Button, Card, Container, Text, TextInput, Title } from "@mantine/core";
 const Settings = () => {
   const [punishment, setPunishment] = useState("");
   const [tables, setTables] = useState("");
+  const [minutes, setMinutes] = useState("");
+  const [seconds, setSeconds] = useState("");
   const [punishments, setPunishments] = useState<Punishment[] | null>(null);
   const [settingsData, setSettingsData] = useState<ISettings | null>(null);
 
@@ -86,6 +88,10 @@ const Settings = () => {
     updateSettingsData({ tables: Number(tables) });
   };
 
+  const handleTimer = () => {
+    updateSettingsData({ minutes: Number(minutes), seconds: Number(seconds) });
+  };
+
   useEffect(() => {
     Promise.all([getPunishments(), getSettingsData()]);
   }, []);
@@ -124,7 +130,7 @@ const Settings = () => {
         )}
       </Container>
       <Container style={{ flexDirection: "column", paddingTop: 10 }}>
-        <Title order={2}>Pöytäryhmien määrä</Title>
+        <Title order={2}>Pöytäryhmät</Title>
         <TextInput
           label={`Pöytäryhmien määrä ${settingsData?.tables}`}
           onChange={(event) => setTables(event.target.value)}
@@ -135,7 +141,30 @@ const Settings = () => {
           onClick={handleTables}
           style={{ marginTop: 10, marginBottom: 20 }}
         >
-          Lisää
+          Muuta
+        </Button>
+      </Container>
+      <Container style={{ flexDirection: "column", paddingTop: 10 }}>
+        <Title order={2}>Ajastin</Title>
+        <Text>{`${settingsData?.minutes} minuutia, ${settingsData?.seconds} sekuntia`}</Text>
+        <Container style={{ width: "100%" }}>
+          <TextInput
+            label={`Minuutit`}
+            onChange={(event) => setMinutes(event.target.value)}
+            value={minutes}
+          />
+          <TextInput
+            label={`Sekuntit`}
+            onChange={(event) => setSeconds(event.target.value)}
+            value={seconds}
+          />
+        </Container>
+        <Button
+          fullWidth
+          onClick={handleTimer}
+          style={{ marginTop: 10, marginBottom: 20 }}
+        >
+          Muuta
         </Button>
       </Container>
     </Container>
