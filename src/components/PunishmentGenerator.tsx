@@ -1,10 +1,12 @@
+import { Button, Container, Title } from "@mantine/core";
 import { useState } from "react";
-import useCounter from "../hooks/useCounter";
 import useTimeout from "../hooks/useTimeout";
 import { Punishment } from "../types";
 
 interface Props {
-  punishments: Punishment[];
+  usedPunishments: Punishment[];
+  unUsedPunishments: Punishment[];
+  restart: () => void;
 }
 
 const generatePunishment = (punishments: Punishment[]) => {
@@ -13,9 +15,12 @@ const generatePunishment = (punishments: Punishment[]) => {
   return punishments[Math.floor(Math.random() * (max - min) + min)].description;
 };
 
-const PunishmentGenerator = ({ punishments }: Props) => {
+const PunishmentGenerator = ({
+  unUsedPunishments,
+  usedPunishments,
+  restart,
+}: Props) => {
   const [isGenerating, setIsGenerating] = useState(true);
-  const { count, setCount, increment, reset } = useCounter();
 
   const stopGenerating = () => {
     setIsGenerating(false);
@@ -26,20 +31,19 @@ const PunishmentGenerator = ({ punishments }: Props) => {
   if (isGenerating) return <div>Arvotaan rangaistusta...</div>;
 
   return (
-    <div
+    <Container
       style={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         padding: 10,
-        width: "50%",
       }}
     >
-      <h2>Rangaistus</h2>
-      <p>{generatePunishment(punishments)}</p>
-      <button onClick={increment}>Restart</button>
-    </div>
+      <Title>Rangaistus</Title>
+      <p>{generatePunishment(unUsedPunishments)}</p>
+      <Button onClick={restart}>Käynnistä uudelleen</Button>
+    </Container>
   );
 };
 

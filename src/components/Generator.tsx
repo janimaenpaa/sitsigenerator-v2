@@ -1,13 +1,16 @@
 import { useState } from "react";
 import settings from "../settings";
+import { Punishment } from "../types";
 import PunishmentGenerator from "./PunishmentGenerator";
 import TableGenerator from "./TableGenerator";
 
 interface Props {
   restart: () => void;
+  usedPunishments: Punishment[];
+  unUsedPunishments: Punishment[];
 }
 
-const Generator = (props: Props) => {
+const Generator = ({ usedPunishments, unUsedPunishments, restart }: Props) => {
   const [isGeneratingTable, setIsGeneratingTable] = useState(true);
   const [isGeneratingPunishment, setIsGeneratingPunishment] = useState(false);
   const [tableHasGenerated, setTableHasGenerated] = useState(false);
@@ -16,11 +19,21 @@ const Generator = (props: Props) => {
 
   if (!tableHasGenerated)
     return (
-      <TableGenerator setHasGenerated={setTableHasGenerated} tables={tables} restart={props.restart} />
+      <TableGenerator
+        setHasGenerated={setTableHasGenerated}
+        tables={tables}
+        restart={restart}
+      />
     );
 
   if (!PunishmentHasGenerated)
-    return <PunishmentGenerator punishments={punishments} />;
+    return (
+      <PunishmentGenerator
+        usedPunishments={usedPunishments}
+        unUsedPunishments={unUsedPunishments}
+        restart={restart}
+      />
+    );
 
   return <div></div>;
 };

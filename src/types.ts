@@ -10,7 +10,8 @@ export type Timer = {
 };
 
 export type Settings = {
-  timer: Timer;
+  minutes: number;
+  seconds: number;
   punishments: Punishment[];
   tables: number;
 };
