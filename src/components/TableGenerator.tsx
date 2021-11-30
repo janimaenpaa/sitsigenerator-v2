@@ -1,7 +1,6 @@
 import { Button, Title } from "@mantine/core";
 import { Dispatch, SetStateAction, useState } from "react";
 import useTimeout from "../hooks/useTimeout";
-import settings from "../settings";
 
 interface Props {
   setHasGenerated: Dispatch<SetStateAction<boolean>>;

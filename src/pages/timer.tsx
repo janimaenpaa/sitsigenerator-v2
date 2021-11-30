@@ -100,6 +100,7 @@ const Timer = ({ punishments, settings }: Props) => {
             usedPunishments={usedPunishments}
             unUsedPunishments={unUsedPunishments}
             restart={handleRestart}
+            settings={settings}
           />
         ) : (
           <Container
