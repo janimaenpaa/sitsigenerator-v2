@@ -105,8 +105,14 @@ const Timer = ({ punishments }: Props) => {
           <Title style={{ fontSize: "10rem" }}>
             {setTimerText(minutes, seconds)}
           </Title>
-          {!isRunning && <Button onClick={() => setIsRunning(true)}>Käynnistä</Button>}
-          {isRunning && <Button color="red" onClick={() => setIsRunning(false)}>Pysäytä</Button>}
+          {!isRunning && (
+            <Button onClick={() => setIsRunning(true)}>Käynnistä</Button>
+          )}
+          {isRunning && (
+            <Button color="red" onClick={() => setIsRunning(false)}>
+              Pysäytä
+            </Button>
+          )}
         </Container>
       )}
     </Container>
@@ -115,7 +121,8 @@ const Timer = ({ punishments }: Props) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   const punishments = await prisma.punishment.findMany();
-  return { props: { punishments } };
+  const settings = await prisma.settings.findMany();
+  return { props: { punishments, settings } };
 };
 
 export default Timer;
