@@ -1,6 +1,6 @@
 import { Punishment, Settings, Timer as ITimer } from "../types";
 import React, { useEffect, useRef, useState } from "react";
-import { GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import prisma from "../lib/prisma";
 import { Button, Container, Title } from "@mantine/core";
 import Generator from "../components/Generator";
@@ -51,11 +51,9 @@ const Timer = ({ punishments, settings }: Props) => {
   const [seconds, setSeconds] = useState(settings.seconds);
   const [isRunning, setIsRunning] = useState(false);
   const [timeIsUp, setTimeIsUp] = useState(false);
-
-  console.log({ unUsedPunishments });
-  console.log({ usedPunishments });
-  console.log({ timeIsUp });
-  console.log({ settings });
+  const [tables, setTables] = useState(
+    Array.from(Array(settings.tables).keys())
+  );
 
   useInterval(
     () => {
@@ -79,6 +77,12 @@ const Timer = ({ punishments, settings }: Props) => {
     setTimeIsUp(false);
   };
 
+  useEffect(() => {
+    if (tables.length === 0) {
+      setTables(Array.from(Array(settings.tables).keys()));
+    }
+  }, [tables]);
+
   return (
     <Container style={{ marginTop: 10 }}>
       <Link href="/" passHref>
@@ -99,6 +103,8 @@ const Timer = ({ punishments, settings }: Props) => {
             unUsedPunishments={unUsedPunishments}
             restart={handleRestart}
             settings={settings}
+            tables={tables}
+            setTables={setTables}
           />
         ) : (
           <Container
@@ -109,7 +115,7 @@ const Timer = ({ punishments, settings }: Props) => {
               alignItems: "center",
             }}
           >
-            <Title style={{ fontSize: "10rem" }}>
+            <Title style={{ fontSize: "20vw" }}>
               {setTimerText(minutes, seconds)}
             </Title>
             {!isRunning && (
@@ -127,7 +133,7 @@ const Timer = ({ punishments, settings }: Props) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const punishments = await prisma.punishment.findMany();
   const settings = await prisma.settings.findFirst();
   return { props: { punishments, settings } };

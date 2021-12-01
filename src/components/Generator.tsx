@@ -7,10 +7,18 @@ interface Props {
   restart: () => void;
   usedPunishments: Punishment[];
   unUsedPunishments: Punishment[];
-  settings: Settings
+  settings: Settings;
+  setTables: React.Dispatch<React.SetStateAction<number[]>>;
+  tables: number[];
 }
 
-const Generator = ({ usedPunishments, unUsedPunishments, settings, restart }: Props) => {
+const Generator = ({
+  usedPunishments,
+  unUsedPunishments,
+  tables,
+  setTables,
+  restart,
+}: Props) => {
   const [isGeneratingTable, setIsGeneratingTable] = useState(true);
   const [isGeneratingPunishment, setIsGeneratingPunishment] = useState(false);
   const [tableHasGenerated, setTableHasGenerated] = useState(false);
@@ -20,7 +28,8 @@ const Generator = ({ usedPunishments, unUsedPunishments, settings, restart }: Pr
     return (
       <TableGenerator
         setHasGenerated={setTableHasGenerated}
-        tables={settings.tables}
+        tables={tables}
+        setTables={setTables}
         restart={restart}
       />
     );

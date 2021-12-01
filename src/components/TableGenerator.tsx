@@ -1,23 +1,33 @@
 import { Button, Title } from "@mantine/core";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import useTimeout from "../hooks/useTimeout";
 
 interface Props {
   setHasGenerated: Dispatch<SetStateAction<boolean>>;
-  tables: number;
+  tables: number[];
+  setTables: Dispatch<React.SetStateAction<number[]>>;
   restart: () => void;
 }
 
-const generateTableNumber = (tables: number) => {
-  const min = 1;
-  const max = tables + 1;
-  return Math.floor(Math.random() * (max - min) + min);
+const generateTableNumber = (tables: number[]) => {
+  return tables[Math.floor(Math.random() * tables.length)];
 };
 
-const TableGenerator = ({ tables, setHasGenerated, restart }: Props) => {
+const TableGenerator = ({
+  tables,
+  setTables,
+  setHasGenerated,
+  restart,
+}: Props) => {
   const [isGenerating, setIsGenerating] = useState(true);
+  const [generatedTable, setGeneratedTable] = useState<number | null>(null);
+  const [generatedTables, setGeneratedTables] = useState<number[]>([]);
 
   const stopGenerating = () => {
+    const table = generateTableNumber(tables);
+    setTables(tables.filter((t) => table !== t));
+    setGeneratedTable(table + 1);
+
     setIsGenerating(false);
   };
 
@@ -34,11 +44,15 @@ const TableGenerator = ({ tables, setHasGenerated, restart }: Props) => {
         alignItems: "center",
       }}
     >
-      <div>Rangaistuksen saa pöytä</div>
-      <Title style={{ margin: 10, fontSize: "10rem" }}>
-        {generateTableNumber(tables)}
-      </Title>
-      <Button onClick={() => setHasGenerated(true)}>Arvo rangaistus</Button>
+      {generatedTable && (
+        <Fragment>
+          <div>Rangaistuksen saa pöytä</div>
+          <Title style={{ margin: 10, fontSize: "10rem" }}>
+            {generatedTable}
+          </Title>
+          <Button onClick={() => setHasGenerated(true)}>Arvo rangaistus</Button>
+        </Fragment>
+      )}
     </div>
   );
 };
