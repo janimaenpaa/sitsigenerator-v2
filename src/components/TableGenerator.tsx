@@ -28,7 +28,7 @@ const TableGenerator = ({
     setIsGenerating(false);
   };
 
-  useTimeout(stopGenerating, 2000);
+  useTimeout(stopGenerating, 5000);
 
   if (isGenerating) return <div>Arvotaan pöytää...</div>;
 

@@ -28,7 +28,7 @@ const PunishmentGenerator = ({
     setIsGenerating(false);
   };
 
-  useTimeout(stopGenerating, 2000);
+  useTimeout(stopGenerating, 5000);
 
   console.log({ punishments });
 
