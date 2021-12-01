@@ -6,7 +6,7 @@ import { Button, Container, Title } from "@mantine/core";
 import Generator from "../components/Generator";
 import Link from "next/link";
 interface Props {
-  punishments: Punishment[];
+  data: Punishment[];
   settings: Settings;
 }
 
@@ -42,11 +42,12 @@ const useInterval = (callback: any, delay: number | null) => {
   }, [delay]);
 };
 
-const Timer = ({ punishments, settings }: Props) => {
+const Timer = ({ data, settings }: Props) => {
   //const { minutes, seconds } = settings;
   //const countDownTo = calculateTimeLeft(timer);
-  const [unUsedPunishments, setUnUsedPunishments] = useState(punishments);
-  const [usedPunishments, setUsedPunishments] = useState([]);
+  /* const [unUsedPunishments, setUnUsedPunishments] = useState(punishments);
+  const [usedPunishments, setUsedPunishments] = useState([]); */
+  const [punishments, setPunishments] = useState(data);
   const [minutes, setMinutes] = useState(settings.minutes);
   const [seconds, setSeconds] = useState(settings.seconds);
   const [isRunning, setIsRunning] = useState(false);
@@ -83,6 +84,12 @@ const Timer = ({ punishments, settings }: Props) => {
     }
   }, [tables]);
 
+  useEffect(() => {
+    if (punishments.length === 0) {
+      setPunishments(data);
+    }
+  }, [punishments]);
+
   return (
     <Container style={{ marginTop: 10 }}>
       <Link href="/" passHref>
@@ -99,8 +106,8 @@ const Timer = ({ punishments, settings }: Props) => {
       >
         {timeIsUp ? (
           <Generator
-            usedPunishments={usedPunishments}
-            unUsedPunishments={unUsedPunishments}
+            punishments={punishments}
+            setPunishments={setPunishments}
             restart={handleRestart}
             settings={settings}
             tables={tables}
@@ -134,9 +141,9 @@ const Timer = ({ punishments, settings }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const punishments = await prisma.punishment.findMany();
+  const data = await prisma.punishment.findMany();
   const settings = await prisma.settings.findFirst();
-  return { props: { punishments, settings } };
+  return { props: { data, settings } };
 };
 
 export default Timer;

@@ -1,12 +1,11 @@
 import { Button, Title } from "@mantine/core";
-import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, Fragment, SetStateAction, useState } from "react";
 import useTimeout from "../hooks/useTimeout";
 
 interface Props {
   setHasGenerated: Dispatch<SetStateAction<boolean>>;
   tables: number[];
   setTables: Dispatch<React.SetStateAction<number[]>>;
-  restart: () => void;
 }
 
 const generateTableNumber = (tables: number[]) => {
@@ -17,11 +16,9 @@ const TableGenerator = ({
   tables,
   setTables,
   setHasGenerated,
-  restart,
 }: Props) => {
   const [isGenerating, setIsGenerating] = useState(true);
   const [generatedTable, setGeneratedTable] = useState<number | null>(null);
-  const [generatedTables, setGeneratedTables] = useState<number[]>([]);
 
   const stopGenerating = () => {
     const table = generateTableNumber(tables);

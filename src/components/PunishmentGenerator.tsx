@@ -4,29 +4,33 @@ import useTimeout from "../hooks/useTimeout";
 import { Punishment } from "../types";
 
 interface Props {
-  usedPunishments: Punishment[];
-  unUsedPunishments: Punishment[];
+  punishments: Punishment[];
+  setPunishments: React.Dispatch<React.SetStateAction<Punishment[]>>;
   restart: () => void;
 }
 
 const generatePunishment = (punishments: Punishment[]) => {
-  const min = 0;
-  const max = punishments.length;
-  return punishments[Math.floor(Math.random() * (max - min) + min)].description;
+  return punishments[Math.floor(Math.random() * punishments.length)];
 };
 
 const PunishmentGenerator = ({
-  unUsedPunishments,
-  usedPunishments,
+  setPunishments,
+  punishments,
   restart,
 }: Props) => {
   const [isGenerating, setIsGenerating] = useState(true);
+  const [punishment, setPunishment] = useState<Punishment>();
 
   const stopGenerating = () => {
+    const generatedPunishment = generatePunishment(punishments);
+    setPunishment(generatedPunishment);
+    setPunishments(punishments.filter((p) => generatedPunishment.id !== p.id));
     setIsGenerating(false);
   };
 
   useTimeout(stopGenerating, 2000);
+
+  console.log({ punishments });
 
   if (isGenerating) return <div>Arvotaan rangaistusta...</div>;
 
@@ -41,9 +45,7 @@ const PunishmentGenerator = ({
       }}
     >
       <Title>Rangaistus</Title>
-      <Text style={{ margin: 10 }}>
-        {generatePunishment(unUsedPunishments)}
-      </Text>
+      <Text style={{ margin: 10 }}>{punishment?.description}</Text>
       <Button style={{ marginTop: 20 }} onClick={restart}>
         Käynnistä uudelleen
       </Button>
