@@ -93,7 +93,7 @@ const Timer = ({ data, settings }: Props) => {
   return (
     <Container style={{ marginTop: 10 }}>
       <Link href="/" passHref>
-        <Button>Takaisin</Button>
+        <Button style={{ position: "absolute", left: 10 }}>Takaisin</Button>
       </Link>
 
       <Container
@@ -101,7 +101,7 @@ const Timer = ({ data, settings }: Props) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
+          height: "90vh",
         }}
       >
         {timeIsUp ? (

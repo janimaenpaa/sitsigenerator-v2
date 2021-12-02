@@ -1,4 +1,4 @@
-import { Button, Title } from "@mantine/core";
+import { Button, Center, Loader, Text, Title } from "@mantine/core";
 import { Dispatch, Fragment, SetStateAction, useState } from "react";
 import useTimeout from "../hooks/useTimeout";
 
@@ -12,11 +12,7 @@ const generateTableNumber = (tables: number[]) => {
   return tables[Math.floor(Math.random() * tables.length)];
 };
 
-const TableGenerator = ({
-  tables,
-  setTables,
-  setHasGenerated,
-}: Props) => {
+const TableGenerator = ({ tables, setTables, setHasGenerated }: Props) => {
   const [isGenerating, setIsGenerating] = useState(true);
   const [generatedTable, setGeneratedTable] = useState<number | null>(null);
 
@@ -30,7 +26,15 @@ const TableGenerator = ({
 
   useTimeout(stopGenerating, 5000);
 
-  if (isGenerating) return <div>Arvotaan pöytää...</div>;
+  if (isGenerating)
+    return (
+      <Center style={{ flexDirection: "column" }}>
+        <Loader size={160} />
+        <Text style={{ fontSize: "4vw", marginTop: 10 }}>
+          Arvotaan pöytää...
+        </Text>
+      </Center>
+    );
 
   return (
     <div
@@ -43,8 +47,10 @@ const TableGenerator = ({
     >
       {generatedTable && (
         <Fragment>
-          <div>Rangaistuksen saa pöytä</div>
-          <Title style={{ margin: 10, fontSize: "10rem" }}>
+          <Text style={{ margin: 10, fontSize: "6vw", textAlign: "center" }}>
+            Rangaistuksen saa pöytäryhmä
+          </Text>
+          <Title style={{ margin: 10, fontSize: "12vw" }}>
             {generatedTable}
           </Title>
           <Button onClick={() => setHasGenerated(true)}>Arvo rangaistus</Button>

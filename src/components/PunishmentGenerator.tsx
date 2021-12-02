@@ -1,4 +1,4 @@
-import { Button, Container, Text, Title } from "@mantine/core";
+import { Button, Center, Container, Loader, Text, Title } from "@mantine/core";
 import { useState } from "react";
 import useTimeout from "../hooks/useTimeout";
 import { Punishment } from "../types";
@@ -32,7 +32,15 @@ const PunishmentGenerator = ({
 
   console.log({ punishments });
 
-  if (isGenerating) return <div>Arvotaan rangaistusta...</div>;
+  if (isGenerating)
+    return (
+      <Center style={{ flexDirection: "column" }}>
+        <Loader size={160} />
+        <Text style={{ fontSize: "4vw", marginTop: 10 }}>
+          Arvotaan rangaistusta...
+        </Text>
+      </Center>
+    );
 
   return (
     <Container
@@ -44,8 +52,12 @@ const PunishmentGenerator = ({
         padding: 10,
       }}
     >
-      <Title>Rangaistus</Title>
-      <Text style={{ margin: 10 }}>{punishment?.description}</Text>
+      <Title style={{ margin: 10, fontSize: "6vw", textAlign: "center" }}>
+        Rangaistus
+      </Title>
+      <Text style={{ margin: 10, fontSize: "4vw", textAlign: "center" }}>
+        {punishment?.description}
+      </Text>
       <Button style={{ marginTop: 20 }} onClick={restart}>
         Käynnistä uudelleen
       </Button>
